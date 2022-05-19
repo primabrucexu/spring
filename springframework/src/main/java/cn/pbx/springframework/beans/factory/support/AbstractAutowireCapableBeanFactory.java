@@ -1,7 +1,10 @@
 package cn.pbx.springframework.beans.factory.support;
 
 import cn.pbx.springframework.beans.BeansException;
+import cn.pbx.springframework.beans.PropertyValue;
 import cn.pbx.springframework.beans.factory.config.BeanDefinition;
+
+import java.lang.reflect.Field;
 
 /**
  * @author BruceXu
@@ -19,13 +22,32 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object doCreateBean(String beanName, BeanDefinition beanDefinition) {
         Object bean = null;
         try {
+            // 创建bean实例
             bean = createBeanInstance(beanDefinition);
+            // 填充bean的属性
+            applyPropertyValues(beanName, bean, beanDefinition);
         } catch (Exception e) {
             throw new BeansException("Instantiation of bean failed", e);
         }
 
         addSingleton(beanName, bean);
         return bean;
+    }
+
+    protected void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
+        for (PropertyValue propertyValue : beanDefinition.getPropertyValues().getPropertyValues()) {
+            try {
+                // 通过反射填充属性
+                Class beanClass = beanDefinition.getBeanClass();
+                Field field = beanClass.getDeclaredField(propertyValue.getName());
+                if (!field.isAccessible()) {
+                    field.setAccessible(true);
+                }
+                field.set(bean, propertyValue.getValue());
+            } catch (Exception e) {
+                throw new BeansException("Error setting property values for bean: " + beanName, e);
+            }
+        }
     }
 
     protected Object createBeanInstance(BeanDefinition beanDefinition) {
