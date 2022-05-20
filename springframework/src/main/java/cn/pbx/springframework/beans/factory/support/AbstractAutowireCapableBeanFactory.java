@@ -3,6 +3,7 @@ package cn.pbx.springframework.beans.factory.support;
 import cn.pbx.springframework.beans.BeansException;
 import cn.pbx.springframework.beans.PropertyValue;
 import cn.pbx.springframework.beans.factory.config.BeanDefinition;
+import cn.pbx.springframework.beans.factory.config.BeanReference;
 
 import java.lang.reflect.Field;
 
@@ -37,13 +38,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
         for (PropertyValue propertyValue : beanDefinition.getPropertyValues().getPropertyValues()) {
             try {
+                String name = propertyValue.getName();
+                Object value = propertyValue.getValue();
+
                 // 通过反射填充属性
                 Class beanClass = beanDefinition.getBeanClass();
-                Field field = beanClass.getDeclaredField(propertyValue.getName());
+                Field field = beanClass.getDeclaredField(name);
                 if (!field.isAccessible()) {
                     field.setAccessible(true);
                 }
-                field.set(bean, propertyValue.getValue());
+
+                // 如果待填充的属性是个bean的话，则去获取这个bean，然后进行填充
+                value = value instanceof BeanReference ? getBean(((BeanReference) value).getBeanName()) : value;
+
+                field.set(bean, value);
             } catch (Exception e) {
                 throw new BeansException("Error setting property values for bean: " + beanName, e);
             }

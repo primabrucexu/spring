@@ -1,9 +1,11 @@
 package cn.pbx.springframework.test;
 
+import cn.pbx.springframework.beans.Car;
 import cn.pbx.springframework.beans.Person;
 import cn.pbx.springframework.beans.PropertyValue;
 import cn.pbx.springframework.beans.PropertyValues;
 import cn.pbx.springframework.beans.factory.config.BeanDefinition;
+import cn.pbx.springframework.beans.factory.config.BeanReference;
 import cn.pbx.springframework.beans.factory.support.DefaultListableBeanFactory;
 import cn.pbx.springframework.service.HelloService;
 
@@ -40,6 +42,31 @@ public class Test {
 
         Person person = (Person) beanFactory.getBean("person");
         System.out.println(person);
+    }
+
+    @org.junit.Test
+    public void testPopulateBeanWithBean() {
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+
+        // 注册Car实例
+        PropertyValues propertyValuesForCar = new PropertyValues();
+        propertyValuesForCar.addPropertyValue(new PropertyValue("brand", "porsche"));
+        BeanDefinition carBeanDefinition = new BeanDefinition(Car.class, propertyValuesForCar);
+        beanFactory.registerBeanDefinition("car", carBeanDefinition);
+
+        // 注册Person实例
+        PropertyValues propertyValuesForPerson = new PropertyValues();
+        propertyValuesForPerson.addPropertyValue(new PropertyValue("name", "张三"));
+        propertyValuesForPerson.addPropertyValue(new PropertyValue("age", 18));
+
+        // Person实例依赖Car实例
+        propertyValuesForPerson.addPropertyValue(new PropertyValue("car", new BeanReference("car")));
+        BeanDefinition beanDefinition = new BeanDefinition(Person.class, propertyValuesForPerson);
+        beanFactory.registerBeanDefinition("person", beanDefinition);
+
+        Person person = (Person) beanFactory.getBean("person");
+        System.out.println(person);
+
     }
 
 }
