@@ -56,7 +56,7 @@ BeanDefinition，顾名思义，用于定义bean信息的类，包含bean的clas
 
 bean容器作为BeanDefinitionRegistry和SingletonBeanRegistry的实现类，具备两者的能力。向bean容器中注册BeanDefinition后，使用bean时才会实例化。
 
-![](./assets/bean-definition-and-bean-definition-registry.png)
+![](https://gitee.com/primabrucexu/image/raw/main/image/202205241032837.png)
 
 测试：
 
@@ -88,7 +88,7 @@ class HelloService {
 
 现在bean是在AbstractAutowireCapableBeanFactory.doCreateBean方法中用beanClass.newInstance()来实例化，仅适用于bean有无参构造函数的情况。
 
-![](./assets/instantiation-strategy.png)
+![](https://gitee.com/primabrucexu/image/raw/main/image/202205241032914.png)
 
 针对bean的实例化，抽象出一个实例化策略的接口InstantiationStrategy，有两个实现类：
 
@@ -197,7 +197,7 @@ public class PopulateBeanWithPropertyValuesTest {
 
 Resource是资源的抽象和访问接口，简单写了三个实现类
 
-![](./assets/resource.png)
+![](https://gitee.com/primabrucexu/image/raw/main/image/202205241032218.png)
 
 - FileSystemResource，文件系统资源的实现类
 - ClassPathResource，classpath下资源的实现类
@@ -251,7 +251,7 @@ BeanDefinitionReader是读取bean定义信息的抽象接口，XmlBeanDefinition
 
 为了方便后面的讲解和功能实现，并且尽量保持和spring中BeanFactory的继承层次一致，对BeanFactory的继承层次稍微做了调整。
 
-![](./assets/xml-file-define-bean.png)
+![](https://gitee.com/primabrucexu/image/raw/main/image/202205241032569.png)
 
 测试： bean定义文件spring.xml
 
@@ -377,7 +377,7 @@ BeanFactory是spring的基础设施，面向spring本身；而ApplicationContext
 
 从bean的角度看，目前生命周期如下：
 
-![](./assets/application-context-life-cycle.png)
+![](https://gitee.com/primabrucexu/image/raw/main/image/202205241032124.png)
 
 测试：见ApplicationContextTest
 
@@ -401,7 +401,7 @@ BeanFactory是spring的基础设施，面向spring本身；而ApplicationContext
 
 到此为止，bean的生命周期如下：
 
-![](./assets/init-and-destroy-method.png)
+![](https://gitee.com/primabrucexu/image/raw/main/image/202205241033922.png)
 
 测试： init-and-destroy-method.xml
 
@@ -483,7 +483,7 @@ Aware是感知、意识的意思，Aware接口是标记性接口，其实现子�
 
 至止，bean的生命周期如下：
 
-![](./assets/aware-interface.png)
+![](https://gitee.com/primabrucexu/image/raw/main/image/202205241033897.png)
 
 测试： spring.xml
 
@@ -550,7 +550,7 @@ public class AwareInterfaceTest {
 
 至止，bean的生命周期如下：
 
-![](./assets/prototype-bean.png)
+![](https://gitee.com/primabrucexu/image/raw/main/image/202205241033307.png)
 
 测试： prototype-bean.xml
 
@@ -941,7 +941,7 @@ DefaultAdvisorAutoProxyCreator是处理横切逻辑的织入返回代理对象�
 
 至此，bean的生命周期如下：
 
-![](./assets/auto-proxy.png)
+![](https://gitee.com/primabrucexu/image/raw/main/image/202205241033122.png)
 
 测试： auto-proxy.xml
 
@@ -1213,7 +1213,7 @@ public class AutowiredAnnotationTest {
 
 至此，bean的生命周期比较完整了，如下：
 
-![](./assets/populate-proxy-bean-with-property-values.png)
+![](https://gitee.com/primabrucexu/image/raw/main/image/202205241033728.png)
 
 测试： populate-proxy-bean-with-property-values.xml
 

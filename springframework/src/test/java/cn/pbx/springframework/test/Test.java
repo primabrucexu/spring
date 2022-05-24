@@ -1,5 +1,6 @@
 package cn.pbx.springframework.test;
 
+import cn.hutool.core.io.IoUtil;
 import cn.pbx.springframework.beans.Car;
 import cn.pbx.springframework.beans.Person;
 import cn.pbx.springframework.beans.PropertyValue;
@@ -7,7 +8,12 @@ import cn.pbx.springframework.beans.PropertyValues;
 import cn.pbx.springframework.beans.factory.config.BeanDefinition;
 import cn.pbx.springframework.beans.factory.config.BeanReference;
 import cn.pbx.springframework.beans.factory.support.DefaultListableBeanFactory;
+import cn.pbx.springframework.core.io.DefaultResourceLoader;
+import cn.pbx.springframework.core.io.Resource;
 import cn.pbx.springframework.service.HelloService;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author BruceXu
@@ -67,6 +73,29 @@ public class Test {
         Person person = (Person) beanFactory.getBean("person");
         System.out.println(person);
 
+    }
+
+    @org.junit.Test
+    public void testResource() throws IOException {
+        DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+
+        //加载classpath下的资源
+        Resource resource = resourceLoader.getResource("classpath:hello.txt");
+        InputStream inputStream = resource.getInputStream();
+        String content = IoUtil.readUtf8(inputStream);
+        System.out.println(content);
+
+        //加载文件系统资源
+        resource = resourceLoader.getResource("src/test/resources/hello.txt");
+        inputStream = resource.getInputStream();
+        content = IoUtil.readUtf8(inputStream);
+        System.out.println(content);
+
+        //加载url资源
+        resource = resourceLoader.getResource("https://www.baidu.com");
+        inputStream = resource.getInputStream();
+        content = IoUtil.readUtf8(inputStream);
+        System.out.println(content);
     }
 
 }
