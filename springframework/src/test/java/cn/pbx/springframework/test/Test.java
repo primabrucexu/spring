@@ -8,6 +8,7 @@ import cn.pbx.springframework.beans.PropertyValues;
 import cn.pbx.springframework.beans.factory.config.BeanDefinition;
 import cn.pbx.springframework.beans.factory.config.BeanReference;
 import cn.pbx.springframework.beans.factory.support.DefaultListableBeanFactory;
+import cn.pbx.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import cn.pbx.springframework.core.io.DefaultResourceLoader;
 import cn.pbx.springframework.core.io.Resource;
 import cn.pbx.springframework.service.HelloService;
@@ -96,6 +97,19 @@ public class Test {
         inputStream = resource.getInputStream();
         content = IoUtil.readUtf8(inputStream);
         System.out.println(content);
+    }
+
+    @org.junit.Test
+    public void testXml() {
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        beanDefinitionReader.loadBeanDefinitions("classpath:spring.xml");
+
+        Person person = beanFactory.getBean("person", Person.class);
+        System.out.println(person);
+
+        Car car = beanFactory.getBean("car", Car.class);
+        System.out.println(car);
     }
 
 }

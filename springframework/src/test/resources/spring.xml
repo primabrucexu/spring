@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	         http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="person" class="cn.pbx.springframework.beans.Person">
+        <property name="name" value="张三"/>
+        <property name="car" ref="car"/>
+    </bean>
+
+    <bean id="car" class="cn.pbx.springframework.beans.Car">
+        <property name="brand" value="benz"/>
+    </bean>
+</beans>
