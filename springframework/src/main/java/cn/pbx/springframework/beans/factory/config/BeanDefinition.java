@@ -1,6 +1,7 @@
 package cn.pbx.springframework.beans.factory.config;
 
 import cn.pbx.springframework.beans.PropertyValues;
+import lombok.ToString;
 
 /**
  * bean的封装类
@@ -8,6 +9,7 @@ import cn.pbx.springframework.beans.PropertyValues;
  * @author BruceXu
  * @date 2022/5/17
  */
+@ToString
 public class BeanDefinition {
 
     private Class beanClass;

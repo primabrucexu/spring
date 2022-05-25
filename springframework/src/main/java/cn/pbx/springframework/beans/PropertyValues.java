@@ -1,5 +1,7 @@
 package cn.pbx.springframework.beans;
 
+import lombok.ToString;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +9,21 @@ import java.util.List;
  * @author BruceXu
  * @date 2022/5/19
  */
+@ToString
 public class PropertyValues {
 
     private final List<PropertyValue> propertyValueList = new ArrayList<>();
 
-    public void addPropertyValue(PropertyValue propertyValue) {
-        propertyValueList.add(propertyValue);
+    public void addPropertyValue(PropertyValue pv) {
+        for (int i = 0; i < this.propertyValueList.size(); i++) {
+            PropertyValue currentPv = this.propertyValueList.get(i);
+            if (currentPv.getName().equals(pv.getName())) {
+                // 覆盖原有的属性值
+                this.propertyValueList.set(i, pv);
+                return;
+            }
+        }
+        this.propertyValueList.add(pv);
     }
 
     public PropertyValue[] getPropertyValues() {

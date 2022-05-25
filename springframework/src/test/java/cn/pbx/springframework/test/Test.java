@@ -11,6 +11,8 @@ import cn.pbx.springframework.beans.factory.support.DefaultListableBeanFactory;
 import cn.pbx.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import cn.pbx.springframework.core.io.DefaultResourceLoader;
 import cn.pbx.springframework.core.io.Resource;
+import cn.pbx.springframework.hook.CustomBeanFactoryPostProcessor;
+import cn.pbx.springframework.hook.CustomerBeanPostProcessor;
 import cn.pbx.springframework.service.HelloService;
 
 import java.io.IOException;
@@ -110,6 +112,39 @@ public class Test {
 
         Car car = beanFactory.getBean("car", Car.class);
         System.out.println(car);
+    }
+
+    @org.junit.Test
+    public void beanHook1() {
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        beanDefinitionReader.loadBeanDefinitions("classpath:spring.xml");
+
+        //在所有BeanDefintion加载完成后，但在bean实例化之前，修改BeanDefinition的属性值
+        CustomBeanFactoryPostProcessor beanFactoryPostProcessor = new CustomBeanFactoryPostProcessor();
+        beanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
+
+        Person person = (Person) beanFactory.getBean("person");
+        System.out.println("===================");
+        System.out.println(person);
+        // name属性在CustomBeanFactoryPostProcessor中被修改为ivy
+    }
+
+    @org.junit.Test
+    public void beanHook2() {
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        beanDefinitionReader.loadBeanDefinitions("classpath:spring.xml");
+
+        //添加bean实例化后的处理器
+        CustomerBeanPostProcessor customerBeanPostProcessor = new CustomerBeanPostProcessor();
+        beanFactory.addBeanPostProcessor(customerBeanPostProcessor);
+
+        Car car = (Car) beanFactory.getBean("car");
+        System.out.println("===================");
+        System.out.println(car);
+        //brand属性在CustomerBeanPostProcessor中被修改为lamborghini
+
     }
 
 }

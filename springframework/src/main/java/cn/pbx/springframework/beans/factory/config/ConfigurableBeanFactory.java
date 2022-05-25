@@ -8,4 +8,11 @@ import cn.pbx.springframework.beans.factory.HierarchicalBeanFactory;
  * @date 2022/5/24
  */
 public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, BeanFactory {
+
+    /**
+     * @param beanPostProcessor
+     */
+    void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
+
+
 }

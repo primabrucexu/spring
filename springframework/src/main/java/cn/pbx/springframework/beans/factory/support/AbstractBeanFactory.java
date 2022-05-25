@@ -1,8 +1,12 @@
 package cn.pbx.springframework.beans.factory.support;
 
 import cn.pbx.springframework.beans.BeansException;
-import cn.pbx.springframework.beans.factory.BeanFactory;
 import cn.pbx.springframework.beans.factory.config.BeanDefinition;
+import cn.pbx.springframework.beans.factory.config.BeanPostProcessor;
+import cn.pbx.springframework.beans.factory.config.ConfigurableBeanFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * bean工厂的模板，预留两个接口，给外部扩展
@@ -10,7 +14,9 @@ import cn.pbx.springframework.beans.factory.config.BeanDefinition;
  * @author BruceXu
  * @date 2022/5/17
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
     @Override
     public Object getBean(String name) throws BeansException {
@@ -47,4 +53,16 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      * @throws BeansException
      */
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
+
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        //有则覆盖
+        this.beanPostProcessors.remove(beanPostProcessor);
+        this.beanPostProcessors.add(beanPostProcessor);
+    }
+
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
+    }
+
 }

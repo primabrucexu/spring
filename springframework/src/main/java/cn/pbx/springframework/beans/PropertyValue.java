@@ -1,9 +1,12 @@
 package cn.pbx.springframework.beans;
 
+import lombok.ToString;
+
 /**
  * @author BruceXu
  * @date 2022/5/19
  */
+@ToString
 public class PropertyValue {
 
     private final String name;
